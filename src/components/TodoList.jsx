@@ -1,13 +1,13 @@
 import {
   RiCheckFill,
   RiDeleteBinLine,
-  RiCheckboxBlankCircleLine,
+  RiCheckboxBlankCircleLine, 
 } from "@remixicon/react";
 
 const TodoList = ({ task, toggle, deleteTask, styles }) => {
   return (
     <div
-      className={`w-full max-w-3xl flex items-start justify-between p-4 rounded-xl border transition-all duration-200 hover:shadow-sm ${styles.item}`}
+      className={`w-full max-w-3xl flex items-start justify-between p-4 border transition-all duration-200 ${styles.item}`}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <button
@@ -22,7 +22,7 @@ const TodoList = ({ task, toggle, deleteTask, styles }) => {
         </button>
 
         <p
-          className={`flex-1 break-words text-[15px] leading-relaxed ${
+          className={`flex-1 wrap-break-word text-[15px] leading-relaxed ${
             task.isComplete ? "line-through text-gray-400" : styles.text
           }`}
         >

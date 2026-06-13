@@ -1,2 +1,10 @@
 @import "tailwindcss";
+@import "@fontsource/press-start-2p";
 
+style {
+  font-family: '"Press Start 2P", cursive',
+}
+
+.pixel-shadow {
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.12);
+}

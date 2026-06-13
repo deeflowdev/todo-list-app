@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import TodoList from "./TodoList";
+import strawberryBtn from "../assets/strawberry_btn.png";
+import ribbonImg from "../assets/ribbon_icon.png"
+
 
 const TodoForm = () => {
   const [theme, setTheme] = useState(() => {
@@ -102,8 +105,14 @@ const TodoForm = () => {
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
           <div>
             <h1
-              className={`text-5xl font-bold tracking-tight ${current.title}`}
+              className={`text-5xl font-bold tracking-tight flex items-center gap-3 ${current.title}`}
             >
+              <img
+                src={ribbonImg}
+                alt=""
+                className="w-10 h-10"
+                style={{ imageRendering: "pixelated" }}
+              />
               tasks
             </h1>
 
@@ -118,7 +127,7 @@ const TodoForm = () => {
               <button
                 key={t}
                 onClick={() => setTheme(t)}
-                className={`px-3 py-1 rounded-full text-sm transition ${
+                className={`px-3 py-2 rounded-full text-sm transition ${
                   theme === t
                     ? `${current.button} text-white`
                     : `${current.input}`
@@ -132,12 +141,12 @@ const TodoForm = () => {
 
         {/* input */}
         <div
-          className={`mt-8 max-w-3xl rounded-2xl border transition-all duration-300 ${current.item}`}
+          className={`mt-8 max-w-3xl flex items-center border transition-all duration-300 ${current.item}`}
         >
           <input
             ref={inputRef}
             placeholder="what needs your attention today?"
-            className={`w-full bg-transparent px-4 sm:px-6 pt-4 sm:pt-5 pb-2 sm:pb-3 outline-none text-base sm:text-lg ${current.subtitle}`}
+            className={`flex-1 bg-transparent px-5 py-4 outline-none text-sm sm:text-base ${current.text}`}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 AddTask();
@@ -145,18 +154,17 @@ const TodoForm = () => {
             }}
           />
 
-          <div className="flex items-center justify-between px-4 sm:px-6 pb-3 sm:pb-4">
-            <span className={`hidden sm:block text-xs ${current.subtitle}`}>
-              press enter to add a task
-            </span>
-
-            <button
-              onClick={AddTask}
-              className={`px-3 sm:px-4 py-2 rounded-lg text-white text-xs sm:text-sm font-medium transition ${current.button}`}
-            >
-              add task
-            </button>
-          </div>
+          <button
+            onClick={AddTask}
+            className="shrink-0 transition active:translate-y-px"
+          >
+            <img
+              src={strawberryBtn}
+              alt="add task"
+              className="w-10 h-10"
+              style={{ imageRendering: "pixelated" }}
+            />
+          </button>
         </div>
 
         {/* tasks */}
@@ -164,8 +172,10 @@ const TodoForm = () => {
           <div className="mt-10 mb-5">
             <h2 className={`text-lg font-semibold ${current.title}`}>tasks</h2>
 
-            <p className={`text-sm ${current.subtitle}`}>
-              {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+            <p
+              className={`text-sm flex items-center gap-2 ${current.subtitle}`}
+            >
+              🍓 {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
             </p>
           </div>
 
