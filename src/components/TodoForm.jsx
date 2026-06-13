@@ -2,226 +2,183 @@ import React, { useEffect, useRef, useState } from "react";
 import TodoList from "./TodoList";
 
 const TodoForm = () => {
-
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
-
     return ["lavender", "sage", "rose", "midnight"].includes(savedTheme)
       ? savedTheme
       : "lavender";
   });
 
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+
+  const inputRef = useRef();
+
   useEffect(() => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   const themes = {
     lavender: {
       page: "bg-[#f8f5ff]",
-      card: "bg-gradient-to-br from-[#f3e8ff] to-[#e9d5ff]",
       title: "text-[#2b223f]",
       subtitle: "text-[#6b5b8a]",
-      item: "bg-white/70 border-purple-100",
-      itemText: "text-[#2b223f]",
-      input: "bg-white/70 border-purple-200 text-[#2b223f]",
+      input: "bg-white border-purple-200 text-[#2b223f]",
+      button: "bg-[#7c3aed] hover:bg-[#6d28d9]",
+      item: "bg-white border-purple-100",
+      text: "text-[#2b223f]",
+      muted: "text-gray-500",
       checkbox: "bg-purple-100 text-purple-600 hover:bg-purple-200",
-      addButton: "bg-[#7c3aed] hover:bg-[#6d28d9]",
     },
 
     sage: {
       page: "bg-[#f4f7f3]",
-      card: "bg-gradient-to-br from-[#eef3eb] to-[#dce7d8]",
       title: "text-[#2f4633]",
       subtitle: "text-[#5c735f]",
-      item: "bg-white/80 border-[#c9d6c5]",
-      itemText: "text-[#2f4633]",
-      input: "bg-white/80 border-[#c9d6c5] text-[#2f4633]",
+      input: "bg-white border-[#c9d6c5] text-[#2f4633]",
+      button: "bg-[#6b8f71] hover:bg-[#5c7c62]",
+      item: "bg-white border-[#c9d6c5]",
+      text: "text-[#2f4633]",
+      muted: "text-gray-500",
       checkbox: "bg-[#dce7d8] text-[#4f6f52] hover:bg-[#c9d6c5]",
-      addButton: "bg-[#6b8f71] hover:bg-[#5c7c62]",
     },
 
     rose: {
       page: "bg-[#fff1f2]",
-      card: "bg-gradient-to-br from-[#ffe4e6] to-[#fecdd3]",
       title: "text-[#881337]",
       subtitle: "text-[#9f1239]",
-      item: "bg-white/80 border-pink-200",
-      itemText: "text-[#881337]",
-      input: "bg-white/80 border-pink-200 text-[#881337]",
+      input: "bg-white border-pink-200 text-[#881337]",
+      button: "bg-pink-500 hover:bg-pink-600",
+      item: "bg-white border-pink-100",
+      text: "text-[#881337]",
+      muted: "text-gray-500",
       checkbox: "bg-pink-100 text-pink-600 hover:bg-pink-200",
-      addButton: "bg-pink-500 hover:bg-pink-600",
     },
 
     midnight: {
       page: "bg-[#151320]",
-      card: "bg-[#1e1b2e] border border-[#312e4a]",
       title: "text-white",
       subtitle: "text-[#a8a3c2]",
+      input: "bg-[#2a2740] border-[#3f3b5e] text-white",
+      button: "bg-[#8b5cf6] hover:bg-[#7c3aed]",
       item: "bg-[#2a2740] border-[#3f3b5e]",
-      itemText: "text-gray-100",
-      input:
-        "bg-[#2a2740] border-[#3f3b5e] text-white placeholder:text-gray-400",
+      text: "text-gray-100",
+      muted: "text-gray-400",
       checkbox: "bg-[#3a3658] text-[#b794f4] hover:bg-[#4a4570]",
-      addButton: "bg-[#8b5cf6] hover:bg-[#7c3aed]",
     },
   };
 
-  const currentTheme = themes[theme]
-
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  })
-
-  const inputRef = useRef()
+  const current = themes[theme];
 
   const AddTask = () => {
-    const inputText = inputRef.current.value.trim()
-    // console.log(inputText)
+    const text = inputRef.current.value.trim();
+    if (!text) return;
 
-    if (!inputText) return
+    setTasks((prev) => [...prev, { id: Date.now(), text, isComplete: false }]);
 
-    const newTask = {
-      id: Date.now(),
-      text: inputText,
-      isComplete: false
-    }
-
-    setTasks((prev) => [...prev, newTask])
-    inputRef.current.value = ''
-  }
+    inputRef.current.value = "";
+  };
 
   const deleteTask = (id) => {
-    setTasks((prevTask) => {
-      return prevTask.filter((tasks) => tasks.id !== id)
-    })
-  }
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
 
   const toggle = (id) => {
-    setTasks((prevTasks) => {
-      return prevTasks.map((task) => {
-        if (task.id === id) {
-          return {...task, isComplete: !task.isComplete}
-        }
-        return task
-      })
-    })
-  }
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks])
-
-  // console.log(theme);
-  // console.log(currentTheme);
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, isComplete: !t.isComplete } : t)),
+    );
+  };
 
   return (
-    <div className={`min-h-screen py-10 ${currentTheme.page}`}>
-      <div
-        className={`w-11/12 md:w-4/5 lg:w-3/5 xl:w-1/2 mx-auto min-h-50 p-6 rounded-2xl shadow-xl ${currentTheme.card}`}
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className={`min-h-screen ${current.page}`}>
+      <div className="max-w-5xl mx-auto px-6 md:px-12 py-12">
+        {/* header */}
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
           <div>
-            <h1 className={`text-3xl font-bold ${currentTheme.title}`}>
-              To-Do List
+            <h1
+              className={`text-5xl font-bold tracking-tight ${current.title}`}
+            >
+              tasks
             </h1>
 
-            <p className={`text-sm mb-6 ${currentTheme.subtitle}`}>
-              stay organised. get things done.
+            <p className={`text-sm mt-3 ${current.subtitle}`}>
+              organise your work and clear your mind.
             </p>
           </div>
 
-          {/* theme icon */}
-          <div className="flex flex-wrap gap-2 sm:gap-3">
-            <button
-              onClick={() => setTheme("lavender")}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                theme === "lavender"
-                  ? "bg-purple-500 text-white"
-                  : "bg-purple-100 text-purple-700"
-              }`}
-            >
-              lavender
-            </button>
-
-            <button
-              onClick={() => setTheme("sage")}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                theme === "sage"
-                  ? "bg-[#6b8f71] text-white"
-                  : "bg-[#dce7d8] text-[#2f4633]"
-              }`}
-            >
-              sage
-            </button>
-
-            <button
-              onClick={() => setTheme("rose")}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                theme === "rose"
-                  ? "bg-pink-500 text-white"
-                  : "bg-pink-100 text-pink-700"
-              }`}
-            >
-              rose
-            </button>
-
-            <button
-              onClick={() => setTheme("midnight")}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                theme === "midnight"
-                  ? "bg-[#1e1b2e] text-white"
-                  : "bg-[#312e4a] text-[#c4b5fd]"
-              }`}
-            >
-              midnight
-            </button>
+          {/* theme switch */}
+          <div className="flex gap-2 flex-wrap">
+            {Object.keys(themes).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTheme(t)}
+                className={`px-3 py-1 rounded-full text-sm transition ${
+                  theme === t
+                    ? `${current.button} text-white`
+                    : `${current.input}`
+                }`}
+              >
+                {t}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* new task */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-6">
+        {/* input */}
+        <div
+          className={`mt-8 max-w-3xl rounded-2xl border transition-all duration-300 ${current.item}`}
+        >
           <input
-            type="text"
             ref={inputRef}
-            placeholder="Add a task..."
-            className={`w-full flex-1 px-4 py-3 rounded-xl border outline-none transition ${currentTheme.input}`}
+            placeholder="what needs your attention today?"
+            className={`w-full bg-transparent px-4 sm:px-6 pt-4 sm:pt-5 pb-2 sm:pb-3 outline-none text-base sm:text-lg ${current.subtitle}`}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                AddTask();
+              }
+            }}
           />
 
-          <button
-            onClick={AddTask}
-            className={`w-full sm:w-auto px-6 py-3 rounded-xl text-white font-medium active:scale-95 transition cursor-pointer ${currentTheme.addButton}`}
-          >
-            Add
-          </button>
+          <div className="flex items-center justify-between px-4 sm:px-6 pb-3 sm:pb-4">
+            <span className={`hidden sm:block text-xs ${current.subtitle}`}>
+              press enter to add a task
+            </span>
+
+            <button
+              onClick={AddTask}
+              className={`px-3 sm:px-4 py-2 rounded-lg text-white text-xs sm:text-sm font-medium transition ${current.button}`}
+            >
+              add task
+            </button>
+          </div>
         </div>
 
-        {/* task items */}
-        <div className="mt-5">
-          <h2 className={`font-semibold text-lg mb-3 ${currentTheme.title}`}>
-            Your Tasks
-          </h2>
+        {/* tasks */}
+        <div className="max-w-3xl">
+          <div className="mt-10 mb-5">
+            <h2 className={`text-lg font-semibold ${current.title}`}>tasks</h2>
 
-          {tasks.length === 0 && (
-            <p className="text-sm text-gray-500 mt-4">
-              no tasks yet. add something.
+            <p className={`text-sm ${current.subtitle}`}>
+              {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
             </p>
-          )}
+          </div>
 
-          <div className="overflow-y-auto max-h-60 space-y-3 pr-2 scrollbar-none">
-            {tasks.map((items) => {
-              return (
-                <TodoList
-                  key={items.id}
-                  text={items.text}
-                  id={items.id}
-                  isComplete={items.isComplete}
-                  deleteTask={deleteTask}
-                  toggle={toggle}
-                  theme={theme}
-                />
-              );
-            })}
+          <div className="space-y-3">
+            {tasks.map((t) => (
+              <TodoList
+                key={t.id}
+                task={t}
+                toggle={toggle}
+                deleteTask={deleteTask}
+                styles={current}
+              />
+            ))}
           </div>
         </div>
       </div>

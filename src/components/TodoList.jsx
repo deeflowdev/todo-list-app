@@ -4,42 +4,17 @@ import {
   RiCheckboxBlankCircleLine,
 } from "@remixicon/react";
 
-const TodoList = ({ text, id, isComplete, deleteTask, toggle, theme }) => {
-  const completedStyles = {
-    lavender: "bg-[#8b5cf6] text-white",
-    rose: "bg-pink-500 text-white",
-    midnight: "bg-[#a78bfa] text-white",
-    sage: "bg-[#6b8f71] text-white",
-  };
-
+const TodoList = ({ task, toggle, deleteTask, styles }) => {
   return (
     <div
-      className={`w-11/12 max-w-xl mx-auto flex items-start space-x-3 justify-between p-4 rounded-xl border shadow-sm mt-5 ${
-        theme === "midnight"
-          ? "bg-[#2a2740] border-[#3f3b5e]"
-          : theme === "rose"
-            ? "bg-white/80 border-pink-200"
-            : theme === "sage"
-              ? "bg-white/80 border-[#c9d6c5]"
-              : "bg-white/70 border-purple-100"
-      }`}
+      className={`w-full max-w-3xl flex items-start justify-between p-4 rounded-xl border transition-all duration-200 hover:shadow-sm ${styles.item}`}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <button
-          onClick={() => toggle(id)}
-          className={`w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 cursor-pointer shrink-0 ${
-            isComplete
-              ? `${completedStyles[theme]} scale-105`
-              : theme === "midnight"
-                ? "bg-[#3a3658] text-[#b794f4] hover:bg-[#4a4570]"
-                : theme === "rose"
-                  ? "bg-pink-100 text-pink-600 hover:bg-pink-200"
-                  : theme === "sage"
-                    ? "bg-[#dce7d8] text-[#4f6f52] hover:bg-[#c9d6c5]"
-                    : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-          }`}
+          onClick={() => toggle(task.id)}
+          className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition ${styles.checkbox}`}
         >
-          {isComplete ? (
+          {task.isComplete ? (
             <RiCheckFill size={18} />
           ) : (
             <RiCheckboxBlankCircleLine size={18} />
@@ -47,37 +22,19 @@ const TodoList = ({ text, id, isComplete, deleteTask, toggle, theme }) => {
         </button>
 
         <p
-          className={`flex-1 font-medium wrap-break-word ${
-            isComplete
-              ? theme === "sage"
-                ? "line-through text-[#7a8f7d] decoration-[#7a8f7d]"
-                : "line-through text-gray-500 decoration-gray-500"
-              : theme === "midnight"
-                ? "text-gray-100"
-                : theme === "rose"
-                  ? "text-[#881337]"
-                  : theme === "sage"
-                    ? "text-[#2f4633]"
-                    : "text-[#2b223f]"
+          className={`flex-1 break-words text-[15px] leading-relaxed ${
+            task.isComplete ? "line-through text-gray-400" : styles.text
           }`}
         >
-          {text}
+          {task.text}
         </p>
       </div>
 
       <button
-        className={`transition cursor-pointer shrink-0 ${
-          theme === "midnight"
-            ? "text-gray-500 hover:text-red-400"
-            : theme === "rose"
-              ? "text-pink-400 hover:text-red-500"
-              : theme === "sage"
-                ? "text-[#6b8f71] hover:text-red-500"
-                : "text-gray-400 hover:text-red-500"
-        }`}
-        onClick={() => deleteTask(id)}
+        onClick={() => deleteTask(task.id)}
+        className="ml-3 shrink-0 text-gray-400 hover:text-red-500 transition"
       >
-        <RiDeleteBinLine size={20} />
+        <RiDeleteBinLine size={18} />
       </button>
     </div>
   );
