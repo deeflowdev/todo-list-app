@@ -120,7 +120,7 @@ const TodoForm = () => {
       <div
         className={`w-11/12 md:w-4/5 lg:w-3/5 xl:w-1/2 mx-auto min-h-50 p-6 rounded-2xl shadow-xl ${currentTheme.card}`}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className={`text-3xl font-bold ${currentTheme.title}`}>
               To-Do List
@@ -132,7 +132,7 @@ const TodoForm = () => {
           </div>
 
           {/* theme icon */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             <button
               onClick={() => setTheme("lavender")}
               className={`px-3 py-1 rounded-full text-sm font-medium transition ${
@@ -180,7 +180,7 @@ const TodoForm = () => {
         </div>
 
         {/* new task */}
-        <div className="flex items-center gap-3 mt-6">
+        <div className="flex items-center gap-3 mt-6 sm:flex-row">
           <input
             type="text"
             ref={inputRef}
@@ -190,7 +190,7 @@ const TodoForm = () => {
 
           <button
             onClick={AddTask}
-            className={`px-6 py-3 rounded-xl text-white font-medium active:scale-95 transition cursor-pointer ${currentTheme.addButton}`}
+            className={`w-full sm:w-auto px-6 py-3 rounded-xl text-white font-medium active:scale-95 transition cursor-pointer ${currentTheme.addButton}`}
           >
             Add
           </button>
@@ -201,6 +201,12 @@ const TodoForm = () => {
           <h2 className={`font-semibold text-lg mb-3 ${currentTheme.title}`}>
             Your Tasks
           </h2>
+
+          {tasks.length === 0 && (
+            <p className="text-sm text-gray-500 mt-4">
+              no tasks yet. add something.
+            </p>
+          )}
 
           <div className="overflow-y-auto max-h-60 space-y-3 pr-2 scrollbar-none">
             {tasks.map((items) => {

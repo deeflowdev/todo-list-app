@@ -14,7 +14,7 @@ const TodoList = ({ text, id, isComplete, deleteTask, toggle, theme }) => {
 
   return (
     <div
-      className={`flex items-start justify-between p-4 rounded-xl border shadow-sm mt-5 ${
+      className={`w-11/12 max-w-xl mx-auto flex items-start space-x-3 justify-between p-4 rounded-xl border shadow-sm mt-5 ${
         theme === "midnight"
           ? "bg-[#2a2740] border-[#3f3b5e]"
           : theme === "rose"
@@ -47,7 +47,7 @@ const TodoList = ({ text, id, isComplete, deleteTask, toggle, theme }) => {
         </button>
 
         <p
-          className={`flex-1 font-medium break-words ${
+          className={`flex-1 font-medium wrap-break-word ${
             isComplete
               ? theme === "sage"
                 ? "line-through text-[#7a8f7d] decoration-[#7a8f7d]"
