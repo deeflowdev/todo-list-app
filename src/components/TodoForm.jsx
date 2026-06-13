@@ -180,12 +180,12 @@ const TodoForm = () => {
         </div>
 
         {/* new task */}
-        <div className="flex items-center gap-3 mt-6 sm:flex-row">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-6">
           <input
             type="text"
             ref={inputRef}
             placeholder="Add a task..."
-            className={`flex-1 px-4 py-3 rounded-xl border outline-none transition ${currentTheme.input}`}
+            className={`w-full flex-1 px-4 py-3 rounded-xl border outline-none transition ${currentTheme.input}`}
           />
 
           <button
